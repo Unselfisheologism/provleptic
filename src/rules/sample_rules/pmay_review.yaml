@@ -1,0 +1,26 @@
+# Sample rule: Flag districts with low PMAY fund utilization for manual review
+rule_id: pmay_low_utilization_review
+name: PMAY Low Utilization Review
+description: "Flag districts with low PMAY fund utilization (< 50%) AND population > 10L for manual review"
+
+condition:
+  all:
+    - entity: District
+      field: pmay_utilization_percent
+      operator: "<"
+      value: 50
+    - entity: District
+      field: population
+      operator: ">"
+      value: 1000000
+
+action:
+  type: flag_for_review
+  priority: high
+  notify_roles:
+    - policymaker
+    - field_officer
+  recommendation_prompt: |
+    Based on low PMAY fund utilization in {district_name}, suggest 3 actionable interventions to improve uptake.
+    Consider barriers like awareness, documentation, and beneficiary outreach.
+    Cite data sources. Keep under 100 words.
