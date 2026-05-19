@@ -11,3 +11,4 @@ data/raw/*
 .pytest_cache/
 .coverage
 htmlcov/
+graph.html
