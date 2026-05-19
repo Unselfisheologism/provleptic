@@ -1,0 +1,27 @@
+# Sample rule: Flag health scheme districts with low coverage
+rule_id: health_low_coverage_alert
+name: Health Scheme Low Coverage Alert
+description: "Flag districts where health scheme coverage is below 60% in high-need areas"
+
+condition:
+  all:
+    - entity: District
+      field: health_scheme_coverage_percent
+      operator: "<"
+      value: 60
+    - entity: District
+      field: population_below_poverty_line
+      operator: ">"
+      value: 30
+
+action:
+  type: flag_for_review
+  priority: high
+  notify_roles:
+    - policymaker
+    - field_officer
+  recommendation_prompt: |
+    District {district_name} has low health scheme coverage ({coverage}%) despite {bpl}% BPL population.
+    Suggest 3 interventions to improve healthcare access for vulnerable populations.
+    Include community health worker engagement, mobile health units, and awareness campaigns.
+    Cite sources. Keep under 100 words.

@@ -1,0 +1,26 @@
+# Sample rule: Flag agricultural districts with low credit disbursement
+rule_id: agriculture_low_credit_alert
+name: Agriculture Credit Low Disbursement Alert
+description: "Flag districts where Kisan Credit Card disbursement is below target in agrarian states"
+
+condition:
+  all:
+    - entity: District
+      field: kcc_disbursement_percent
+      operator: "<"
+      value: 70
+    - entity: District
+      field: agrarian_percentage
+      operator: ">"
+      value: 50
+
+action:
+  type: flag_for_review
+  priority: medium
+  notify_roles:
+    - field_officer
+  recommendation_prompt: |
+    In agrarian district {district_name}, only {disbursement}% of Kisan Credit Card target has been disbursed.
+    Suggest 3 actionable steps to improve credit flow to small and marginal farmers.
+    Consider bank outreach, simplified documentation, and digital onboarding.
+    Cite sources. Keep under 100 words.
