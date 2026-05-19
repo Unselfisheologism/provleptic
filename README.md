@@ -1,14 +1,15 @@
-# 🇮🇳 Sovereign RAG for Indian Public Data
+# 🇮🇳 Sovereign RAG + Ontology for Indian Public Data
 
-Build a reproducible pipeline for ingesting and querying Indian public datasets (CSV or PDF) with exact source citations.
+Build a reproducible pipeline for ingesting, querying, and visualizing Indian public policy data using RAG and Knowledge Graphs.
 
 ## 🚀 Features
 
-- **Local-first RAG**: Chunking, embedding, and storage happen locally.
-- **Source Citations**: Every answer includes the exact source file and row/page number.
-- **API Key Pooling**: Robust rotation and retry logic for OpenAI-compatible endpoints.
-- **Indian Context**: Optimized for datasets from data.gov.in and NITI Aayog.
-- **No Docker**: Simple Python environment for easy deployment.
+- **Phase 1: Local-first RAG**: Chunking, embedding, and storage happen locally with exact source citations.
+- **Phase 2: Ontology Layer**: Automatic extraction of entities (Schemes, Ministries, Districts) and relationships.
+- **Property Graph**: Stored using NetworkX + SQLite (No Docker required).
+- **Natural Language Graph Queries**: "Show schemes for rural women in Odisha".
+- **Interactive Visualization**: Pyvis-powered graph explorer directly in Streamlit.
+- **Data Lineage**: Every node/edge traces back to the source chunk.
 
 ## 🏗️ Architecture
 
@@ -16,48 +17,50 @@ Build a reproducible pipeline for ingesting and querying Indian public datasets 
 graph TD
     Data[Indian Public Data CSV/PDF] --> Ingest[Ingest & Chunk]
     Ingest --> Embed[Embedding Service]
+    Ingest --> Extractor[Ontology Extractor]
     Embed --> Chroma[ChromaDB Vector Store]
+    Extractor --> GraphStore[NetworkX + SQLite Graph]
     User[User Question] --> Retriever[Retriever]
+    User --> GraphQuery[Graph Query Translator]
     Chroma --> Retriever
+    GraphStore --> GraphQuery
     Retriever --> Generator[LLM Generator]
+    GraphQuery --> UI[Streamlit Ontology Tab]
     Generator --> Answer[Answer + Citations]
-    Generator --> Logs[JSON Logs]
 ```
 
 ## 🛠️ Local Development
 
 ```bash
-make dev    # Create venv + install deps
+# Install dependencies
+pip install -r requirements.txt
+python -m spacy download en_core_web_sm
+
+# Set up environment
 cp .env.example .env # Add your OPENCODE_API_KEYS
-make run    # Start Streamlit app locally
-make test   # Run pytest suite
+
+# Run the app
+streamlit run src/api/main.py
+
+# Run tests
+pytest
 ```
 
-## 🚀 Deploy to Streamlit Cloud (Free, No Docker)
+## 🕸️ Ontology Schema (Indian Policy)
 
-1. Push this repo to GitHub
-2. Go to https://streamlit.io/cloud → "New app"
-3. Connect your repo, select branch `main`
-4. Set main file path: `src/api/main.py`
-5. Add environment variables in Settings:
-   - `OPENCODE_API_KEYS`: your comma-separated API keys
-   - `CHROMA_PERSIST_DIR`: `./data/chroma` (default)
-6. Click "Deploy" → get a public URL in <2 minutes
+- **Entities**: `Scheme`, `Ministry`, `District`, `State`, `Outcome`, `Beneficiary`, `Target Group`
+- **Relationships**: 
+    - `Ministry` --IMPLEMENTS--> `Scheme`
+    - `Scheme` --TARGETS--> `Beneficiary`
+    - `District` --LOCATED_IN--> `State`
+    - `Scheme` --ACHIEVED--> `Outcome`
 
-## 🚀 Deploy to Hugging Face Spaces
+## 🚀 Deployment (Streamlit Cloud / HF Spaces)
 
-1. Create new Space at https://huggingface.co/spaces
-2. Choose "Streamlit" template
-3. Upload files or connect GitHub repo
-4. In Space Settings → "Variables and secrets":
-   - Add `OPENCODE_API_KEYS` as a secret
-5. Click "Deploy" → public URL ready
-
-## ⚖️ Compliance & Privacy
-
-- **DPDP Act 2023**: This tool is intended for research and analysis purposes only.
-- **Data Minimization**: Only necessary columns are ingested and stored.
-- **Reproducibility**: Every query is logged with retrieved chunk hashes for auditability.
+1. Push this repo to GitHub.
+2. In Streamlit Cloud, select `src/api/main.py` as the entry point.
+3. Add `OPENCODE_API_KEYS` in the Secrets/Environment Variables.
+4. The app will automatically install requirements and download the spaCy model.
 
 ## 📝 License
 
