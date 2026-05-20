@@ -1,6 +1,6 @@
 ---
 title: Sovereign RAG + Ontology + Decision Support for Indian Public Data
-emoji: 🇮🇳
+emoji: 🚀
 colorFrom: blue
 colorTo: purple
 sdk: streamlit
