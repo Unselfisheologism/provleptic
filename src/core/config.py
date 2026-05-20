@@ -3,7 +3,7 @@ from typing import List
 import os
 
 class Settings(BaseSettings):
-    OPENCODE_API_KEYS: str
+    OPENCODE_API_KEYS: str = ""
     OPENCODE_BASE_URL: str = "https://opencode.ai/zen/v1"
     CHROMA_PERSIST_DIR: str = "./data/chroma"
     LOG_DIR: str = "./logs"
