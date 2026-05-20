@@ -1,3 +1,15 @@
+---
+title: Sovereign RAG + Ontology + Decision Support for Indian Public Data
+emoji: 🇮🇳
+colorFrom: blue
+colorTo: purple
+sdk: streamlit
+sdk_version: "1.32.0"
+python_version: "3.10"
+app_file: src/api/main.py
+pinned: false
+---
+
 # 🇮🇳 Sovereign RAG + Ontology + Decision Support for Indian Public Data
 
 Build a reproducible pipeline for ingesting, querying, and visualizing Indian public policy data using RAG, Knowledge Graphs, and Policy Decision Support.
