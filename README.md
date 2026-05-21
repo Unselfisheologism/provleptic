@@ -65,7 +65,7 @@ pip install -r requirements.txt
 python -m spacy download en_core_web_sm
 
 # Set up environment
-cp .env.example .env # Add your OPENCODE_API_KEYS
+cp .env.example .env # Add your GITLAWB_OPENGATEWAY_API_KEY
 
 # Run the app
 streamlit run src/api/main.py
@@ -149,7 +149,7 @@ Every query and action is logged with:
 
 1. Push this repo to GitHub.
 2. In Streamlit Cloud, select `src/api/main.py` as the entry point.
-3. Add `OPENCODE_API_KEYS` in the Secrets/Environment Variables.
+3. Add `GITLAWB_OPENGATEWAY_API_KEY` in the Secrets/Environment Variables.
 4. The app will automatically install requirements and download the spaCy model.
 
 **Note for HF Spaces**: For LLM calls in recommendations, you may need GPU-enabled spaces. Consider using:
