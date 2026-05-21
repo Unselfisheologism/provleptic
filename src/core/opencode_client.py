@@ -8,7 +8,7 @@ from loguru import logger
 class KeyRotatingClient:
     def __init__(self):
         self.keys = settings.api_keys
-        self.base_url = settings.OPENCODE_BASE_URL
+        self.base_url = settings.GITLAWB_OPENGATEWAY_BASE_URL
         self.client = None
         self._rotate_key()
     
